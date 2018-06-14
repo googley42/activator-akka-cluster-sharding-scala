@@ -13,6 +13,9 @@ object RootActor {
   def props: Props = Props(classOf[RootActor]) //TODO: do we need a pass in a unique name?
 }
 
+//
+// TODO: wire into ShardRegion
+//
 class RootActor extends Actor with ActorLogging {
   override def receive: Receive = {
     case SendNotificationMsg(clientId, notification) =>
