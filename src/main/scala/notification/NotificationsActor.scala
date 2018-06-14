@@ -25,6 +25,7 @@ Things I have had to change from vanilla akka solution
 */
 //TODO rename to ClientNotificationQueueActor
 object NotificationsActor {
+  val ShardName = "Notifications"
 
   @deprecated("use ShardRegion entry point instead")
   def notificationsActorId(clientId: String) = s"NotificationsActor:$clientId"
