@@ -36,6 +36,18 @@ DONE
 
 # Startup logging output with multiple nodes
 
+got error:
+
+    [error] (run-main-0) java.lang.ClassNotFoundException: scala.Int
+    java.lang.ClassNotFoundException: scala.Int
+    [trace] Stack trace suppressed: run last compile:runMain for the full output.
+
+FIXED by upping from 
+
+    sbt.version=0.13.8 to sbt.version=0.13.13
+    
+Tried to run example as per instructions but got persistence errors - I guess from levelDB. After I switched to mongo these went away.   
+
 To run example on 3 nodes:
 
 Start 1st node
