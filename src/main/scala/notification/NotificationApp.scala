@@ -62,8 +62,8 @@ object NotificationApp {
       futureAsk
 
       Thread.sleep(5000)
-      system.terminate() // TODO: how to terminate a cluster?
-      Thread.sleep(5000)
+//      system.terminate() // TODO: how to terminate a cluster?
+//      Thread.sleep(5000)
     }
 
 //    def startupSharedJournal(system: ActorSystem, startStore: Boolean, path: ActorPath): Unit = {
