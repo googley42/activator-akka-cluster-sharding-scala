@@ -1,7 +1,7 @@
 package notification.model
 
 trait NotificationCmd {
-  val id: ClientId
+  val clientId: ClientId
 }
 
 case class Notification(payload: String, url: String)

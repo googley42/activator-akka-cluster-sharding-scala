@@ -28,20 +28,20 @@ object NotificationsActor {
   val ShardName = "Notifications"
 
   @deprecated("use ShardRegion entry point instead")
-  def notificationsActorId(clientId: String) = s"NotificationsActor:$clientId"
+  def notificationsActorId(clientId: ClientId) = s"NotificationsActor:$clientId"
 
   val idExtractor: ShardRegion.ExtractEntityId = {
-    case cmd: NotificationCmd => (cmd.id, cmd)
+    case cmd: NotificationCmd => (cmd.clientId, cmd)
   }
 
   val shardResolver: ShardRegion.ExtractShardId = {
-    case cmd: NotificationCmd => (math.abs(cmd.id.hashCode) % 100).toString
+    case cmd: NotificationCmd => (math.abs(cmd.clientId.hashCode) % 100).toString
   }
 
   // commands
-  case class EnqueueCmd(id: ClientId, notification: Notification) extends NotificationCmd
-  case class QueryNotificationsCmd(id: ClientId) extends NotificationCmd
-  case class SendAckCmd(id: ClientId, notification: Notification) extends NotificationCmd
+  case class EnqueueCmd(clientId: ClientId, notification: Notification) extends NotificationCmd
+  case class QueryNotificationsCmd(clientId: ClientId) extends NotificationCmd
+  case class SendAckCmd(clientId: ClientId, notification: Notification) extends NotificationCmd
 
   // events
   case class EnqueuedEvt(notification: Notification)
@@ -59,7 +59,7 @@ object NotificationsActor {
 }
 
 //TODO: passivate after timeout to preserve resources
-class NotificationsActor(clientId: String) extends PersistentActor with ActorLogging {
+class NotificationsActor() extends PersistentActor with ActorLogging {
 
   // self.path.parent.name is the type name (utf-8 URL-encoded)
   // self.path.name is the entry identifier (utf-8 URL-encoded)
@@ -102,7 +102,7 @@ class NotificationsActor(clientId: String) extends PersistentActor with ActorLog
         log.info(state.toString)
         log.info(s"EnqueueCmd sender().toString() = ${sender().toString()}")
         sendNotification(notification) //TODO: think about doing this in another message handler on a message to self
-        sender() ! NotificationEnqueuedAck("conversationId")  // TODO: return some unique id for ACK
+        sender() ! NotificationEnqueuedAck("conversationId")  // Note sender() is originating sender. TODO: return some unique id for ACK
       }
     case QueryNotificationsCmd =>
       persist(NotificationsEvt){ event =>

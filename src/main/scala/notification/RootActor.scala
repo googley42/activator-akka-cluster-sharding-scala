@@ -1,27 +1,22 @@
 package notification
 
 import akka.actor.{Actor, ActorLogging, Props}
-import akka.cluster.sharding.{ClusterSharding, ClusterShardingSettings}
+import akka.cluster.sharding.ClusterSharding
 import notification.NotificationsActor.{EnqueueCmd, QueryNotificationsCmd}
 import notification.RootActor.{NotificationsMsg, SendNotificationMsg}
-import notification.model.{Notification, NotificationCmd}
-import sample.blog.AuthorListing
+import notification.model.{ClientId, Notification, NotificationCmd}
 
 object RootActor {
-  case class NotificationEnqueuedAck(id: String)
-  case class SendNotificationMsg(clientId: String, notification: Notification)
-  case class NotificationsMsg(clientId: String)
+  case class NotificationEnqueuedAck(id: String) //TODO: think of a unique id for a notification
+  case class SendNotificationMsg(clientId: ClientId, notification: Notification) extends NotificationCmd
+  case class NotificationsMsg(clientId: ClientId) extends NotificationCmd
 
   def props: Props = Props(classOf[RootActor]) //TODO: do we need a pass in a unique name?
 }
 
 class RootActor extends Actor with ActorLogging {
-  val notificationsRegion = ClusterSharding(context.system).start(
-    typeName = NotificationsActor.ShardName,
-    entityProps = AuthorListing.props(),
-    settings = ClusterShardingSettings(context.system),
-    extractEntityId = NotificationsActor.idExtractor,
-    extractShardId = NotificationsActor.shardResolver)
+
+  val notificationsRegion = ClusterSharding(context.system).shardRegion(NotificationsActor.ShardName)
 
   override def receive: Receive = {
     case SendNotificationMsg(clientId, notification) =>
