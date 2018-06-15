@@ -42,11 +42,11 @@ object NotificationApp {
 
       if (port != "2551" && port != "2552") {
         Thread.sleep(5000)
-        sendMsgsToRootActorInSeparateApplicationActorSystem(clusterSystem)
+        sendMsgsToRootActor(clusterSystem)
       }
     }
 
-    def sendMsgsToRootActorInSeparateApplicationActorSystem(system: ActorSystem) = {
+    def sendMsgsToRootActor(system: ActorSystem) = {
       val clientId = "10000"
 
       println("1. Getting root actor")
