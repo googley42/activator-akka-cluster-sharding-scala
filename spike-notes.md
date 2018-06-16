@@ -16,12 +16,6 @@ sbt 'runMain sample.blog.BlogApp 0'
     
 
 TODO
-- phase1 - existing example
-    - refine solution OUTSIDE of an endpoint
-        - what is best way to bootstrap Sharded actor system?
-        - how to determine what node an entity is running one?
-    - manually test node outage
-    - create a `Bot2` to fire load
 - phase2 - `customs-notification`
     - create a branch
     - add cluster/shard stuff
@@ -29,10 +23,15 @@ TODO
     - test with harness 
 
 DONE
-- existing example
+- phase1 - existing example
     - keep existing logic to keep tests running
     - upgrade example to latest akka version - fix anything that breaks
     - add a noddy Notifications persistent actor and wire into a `ShardRegion`     
+    - refine solution OUTSIDE of an endpoint
+        - what is best way to bootstrap Sharded actor system?
+        - how to determine what node an entity is running one?
+    - manually test node outage
+    - create a `Bot2` to fire load
 
 # Startup logging output with multiple nodes
 
